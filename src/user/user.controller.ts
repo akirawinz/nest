@@ -1,4 +1,15 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { UserService } from './user.service';
+import { AuthGuard } from '@nestjs/passport';
+import { User } from './user.entity';
 
 @Controller('user')
-export class UserController {}
+export class UserController {
+  constructor(private userService: UserService) {}
+
+  @Get('/:id')
+  @UseGuards(AuthGuard('jwt'))
+  getUserById(@Param('id') id: number): Promise<User> {
+    return this.userService.getUserById(id);
+  }
+}

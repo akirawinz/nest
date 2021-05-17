@@ -5,4 +5,6 @@ export class CreatePostDto {
   description: string;
   @IsOptional()
   image_url: string;
+  @IsOptional()
+  image: any;
 }

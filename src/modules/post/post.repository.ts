@@ -1,12 +1,12 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { PostEntity } from './entities/post.entity';
-import { PostDto } from './dto/post.dto';
+import { CreatePostDto } from './dto/create-post.dto';
 import { UserDto } from '@modules/user/dto/user.dto';
 
 export interface PostRepository {
   getPosts: () => Promise<PostEntity[]>;
   getPostByUserId: (id: number) => Promise<PostEntity[]>;
-  createPost: (postDto: PostDto, user: UserDto) => Promise<PostEntity>;
+  createPost: (postDto: CreatePostDto, user: UserDto) => Promise<PostEntity>;
 }
 
 @EntityRepository(PostEntity)
@@ -50,13 +50,19 @@ export class PostEntityRepository
       .getMany();
   }
 
-  async createPost(postDto: PostDto, user: UserDto): Promise<PostEntity> {
-    const { description, image_url } = postDto;
+  async createPost(
+    createPostDto: CreatePostDto,
+    user: UserDto,
+  ): Promise<PostEntity> {
+    const { description, image_url } = createPostDto;
+
     const post = new PostEntity();
     post.userId = user.id;
     post.description = description;
     post.image_url = image_url;
+
     await post.save();
+
     return post;
   }
 }

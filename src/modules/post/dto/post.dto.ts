@@ -1,21 +1,24 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class PostDto {
-  /**
-   * post description
-   */
-  @IsNotEmpty()
+  @ApiProperty({
+    description: 'post id',
+    required: true,
+    example: 1,
+  })
+  id: number;
+
+  @ApiProperty({
+    description: 'post content',
+    required: true,
+    example: 'this is post.',
+  })
   description: string;
 
-  /**
-   * image url
-   */
-  @IsOptional()
+  @ApiProperty({
+    description: 'uploaded image url',
+    required: false,
+    example: 'https://image.com/beautiful.jpg',
+  })
   image_url: string;
-
-  /**
-   * ???
-   */
-  @IsOptional()
-  image: any;
 }

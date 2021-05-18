@@ -14,7 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'daytechComp',
+      secretOrKey: 'daytechComp', // FIXME: this should keep it secret.
     });
   }
 

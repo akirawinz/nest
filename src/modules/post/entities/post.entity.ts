@@ -1,3 +1,5 @@
+import { CommentEntity } from '@modules/comment/entities/comment.entity';
+import { User } from '@modules/user/entities/user.entity';
 import {
   BaseEntity,
   Column,
@@ -8,8 +10,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../user/entities/user.entity';
-import { CommentEntity } from '../../comment/entities/comment.entity';
 
 @Entity({ name: 'post' })
 export class PostEntity extends BaseEntity {

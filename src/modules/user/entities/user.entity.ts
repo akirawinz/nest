@@ -9,8 +9,8 @@ import {
   OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { PostEntity } from '../../post/entities/post.entity';
-import { CommentEntity } from '../../comment/entities/comment.entity';
+import { CommentEntity } from '@modules/comment/entities/comment.entity';
+import { PostEntity } from '@modules/post/entities/post.entity';
 
 @Entity()
 @Unique(['username'])

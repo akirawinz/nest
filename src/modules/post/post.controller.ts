@@ -11,13 +11,14 @@ import {
   Get,
   Delete,
 } from '@nestjs/common';
-import { PostService, PostEntity } from '@modules/post';
 import { GetUser } from '@common/decorators/request/get-user.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { PostDto } from './dto/post.dto';
 import { uploadImagePath } from '@common/utils/file-uploading.utils';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UserDto } from '@modules/user/dto/user.dto';
+import { PostService } from './post.service';
+import { PostEntity } from './entities/post.entity';
 
 @UseGuards(AuthGuard())
 @Controller('post')

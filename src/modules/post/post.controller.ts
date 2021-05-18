@@ -11,14 +11,13 @@ import {
   Get,
   Delete,
 } from '@nestjs/common';
-import { PostService } from './post.service';
-import { GetUser } from '../user/get-user.decorator';
-import { User } from '../user/user.entity';
+import { PostService, PostEntity } from '@modules/post';
+import { GetUser } from '@common/decorators/request/get-user.decorator';
 import { AuthGuard } from '@nestjs/passport';
-import { CreatePostDto } from './dto/create-post.dto';
-import { uploadImagePath } from '../utils/file-uploading.utils';
+import { PostDto } from './dto/post.dto';
+import { uploadImagePath } from '@common/utils/file-uploading.utils';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { PostEntity } from './post.entity';
+import { UserDto } from '@modules/user/dto/user.dto';
 
 @UseGuards(AuthGuard())
 @Controller('post')
@@ -36,7 +35,7 @@ export class PostController {
   }
 
   @Get('/:id')
-  getPostByIdAndUserId(@Param('id') id: number, @GetUser() user: User) {
+  getPostByIdAndUserId(@Param('id') id: number, @GetUser() user: UserDto) {
     return this.postService.getPostByIdAndUserId(id, user);
   }
 
@@ -44,8 +43,8 @@ export class PostController {
   @UseInterceptors(FileInterceptor('image', uploadImagePath()))
   createPost(
     @UploadedFile(ValidationPipe) file,
-    @Body() createPostDto: CreatePostDto,
-    @GetUser() user: User,
+    @Body() createPostDto: PostDto,
+    @GetUser() user: UserDto,
   ): Promise<PostEntity> {
     createPostDto.image_url = file.filename;
     return this.postService.createPost(createPostDto, user);
@@ -56,8 +55,8 @@ export class PostController {
   updatePost(
     @Param('id') id: number,
     @UploadedFile(ValidationPipe) file,
-    @Body(ValidationPipe) createPostDto: CreatePostDto,
-    @GetUser() user: User,
+    @Body(ValidationPipe) createPostDto: PostDto,
+    @GetUser() user: UserDto,
   ): Promise<PostEntity> {
     if (file) {
       createPostDto.image_url = file.filename;
@@ -66,7 +65,7 @@ export class PostController {
   }
 
   @Delete('/:id')
-  deletePost(@Param('id') id: number, @GetUser() user: User): Promise<void> {
+  deletePost(@Param('id') id: number, @GetUser() user: UserDto): Promise<void> {
     return this.postService.deletePost(id, user);
   }
 }

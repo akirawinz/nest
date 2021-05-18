@@ -5,15 +5,16 @@ import {
 } from '@nestjs/common';
 import * as fsExtra from 'fs-extra';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PostRepository } from './post.repository';
-import { CreatePostDto } from './dto/create-post.dto';
-import { User } from '../user/user.entity';
-import { PostEntity } from './post.entity';
+import { PostEntityRepository } from './post.repository';
+import { PostDto } from './dto/post.dto';
+import { PostEntity } from './entities/post.entity';
+import { UserDto } from '@modules/user/dto/user.dto';
 
 @Injectable()
 export class PostService {
   constructor(
-    @InjectRepository(PostRepository) private postRepository: PostRepository,
+    @InjectRepository(PostEntityRepository)
+    private postRepository: PostEntityRepository,
   ) {}
 
   async getPosts() {
@@ -24,14 +25,11 @@ export class PostService {
     return this.postRepository.getPostByUserId(id);
   }
 
-  async createPost(
-    createPostDto: CreatePostDto,
-    user: User,
-  ): Promise<PostEntity> {
-    return this.postRepository.createPost(createPostDto, user);
+  async createPost(postDto: PostDto, user: UserDto): Promise<PostEntity> {
+    return this.postRepository.createPost(postDto, user);
   }
 
-  async getPostByIdAndUserId(id: number, user: User) {
+  async getPostByIdAndUserId(id: number, user: UserDto) {
     const found = await this.postRepository.findOne({
       where: { id, userId: user.id },
     });
@@ -41,10 +39,10 @@ export class PostService {
 
   async updatePost(
     id: number,
-    user: User,
-    createPostDto: CreatePostDto,
+    user: UserDto,
+    postDto: PostDto,
   ): Promise<PostEntity> {
-    const { description, image_url } = createPostDto;
+    const { description, image_url } = postDto;
     const post = await this.getPostByIdAndUserId(id, user);
     post.description = description;
     if (image_url) {
@@ -59,7 +57,7 @@ export class PostService {
     return post;
   }
 
-  async deletePost(id: number, user: User): Promise<void> {
+  async deletePost(id: number, user: UserDto): Promise<void> {
     const post = await this.getPostByIdAndUserId(id, user);
     await fsExtra.remove(`upload/${post.image_url}`);
     const result = await this.postRepository.delete({ id, userId: user.id });

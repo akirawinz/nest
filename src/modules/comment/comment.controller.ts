@@ -9,11 +9,11 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from '../user/get-user.decorator';
+import { GetUser } from '@common/decorators/request/get-user.decorator';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { User } from '../user/user.entity';
-import { CommentEntity } from './comment.entity';
+import { User } from '@modules/user/entities/user.entity';
+import { CommentEntity } from './entities/comment.entity';
 
 @Controller('comment')
 @UseGuards(AuthGuard())

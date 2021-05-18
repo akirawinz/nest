@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { UserRepository } from '../user/user.repository';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { User } from '../user/user.entity';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +12,7 @@ export class AuthService {
     private userRepository: UserRepository,
     private jwtService: JwtService,
   ) {}
+
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<User> {
     return this.userRepository.signUp(authCredentialsDto);
   }

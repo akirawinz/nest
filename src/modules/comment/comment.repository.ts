@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { CommentEntity } from './comment.entity';
+import { CommentEntity } from './entities/comment.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { User } from '../user/user.entity';
+import { User } from '../user/entities/user.entity';
 import { InternalServerErrorException } from '@nestjs/common';
 
 @EntityRepository(CommentEntity)

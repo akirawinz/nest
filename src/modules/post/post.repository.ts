@@ -1,10 +1,18 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { PostEntity } from './post.entity';
-import { CreatePostDto } from './dto/create-post.dto';
-import { User } from '../user/user.entity';
+import { PostEntity } from './entities/post.entity';
+import { PostDto } from './dto/post.dto';
+import { UserDto } from '@modules/user/dto/user.dto';
+
+export interface PostRepository {
+  getPosts: () => Promise<PostEntity[]>;
+  getPostByUserId: (id: number) => Promise<PostEntity[]>;
+  createPost: (postDto: PostDto, user: UserDto) => Promise<PostEntity>;
+}
 
 @EntityRepository(PostEntity)
-export class PostRepository extends Repository<PostEntity> {
+export class PostEntityRepository
+  extends Repository<PostEntity>
+  implements PostRepository {
   async getPosts() {
     let posts = await this.createQueryBuilder('post')
       .leftJoinAndSelect('post.user', 'user')
@@ -20,6 +28,7 @@ export class PostRepository extends Repository<PostEntity> {
       ])
       .orderBy('post.updated_at', 'DESC')
       .getMany();
+
     posts = posts.map((post) => {
       post.comment.sort(
         (a, b) =>
@@ -27,11 +36,12 @@ export class PostRepository extends Repository<PostEntity> {
       );
       return post;
     });
+
     return posts;
     // return this.find({ relations: ['user', 'comment', 'comment.getUser'] });
   }
 
-  async getPostByUserId(id) {
+  async getPostByUserId(id: number) {
     return this.createQueryBuilder('post')
       .where('post.userId = :id', { id: id })
       .leftJoinAndSelect('post.user', 'user')
@@ -39,11 +49,9 @@ export class PostRepository extends Repository<PostEntity> {
       .select(['post', 'user.id', 'user.username', 'comment'])
       .getMany();
   }
-  async createPost(
-    createPostDto: CreatePostDto,
-    user: User,
-  ): Promise<PostEntity> {
-    const { description, image_url } = createPostDto;
+
+  async createPost(postDto: PostDto, user: UserDto): Promise<PostEntity> {
+    const { description, image_url } = postDto;
     const post = new PostEntity();
     post.userId = user.id;
     post.description = description;

@@ -16,7 +16,7 @@ const config: Config.InitialOptions = {
 
 const e2eConfig: Config.InitialOptions = {
   ...config,
-  rootDir: 'test',
+  rootDir: 'e2e',
   testEnvironment: 'node',
   testRegex: '.e2e-spec.ts$',
 };

@@ -1,16 +1,16 @@
 import { extname } from 'path';
-import { diskStorage } from 'multer';
+import { diskStorage, DiskStorageOptions, Options } from 'multer';
 
-const filterImageFile = (req, file, callback) => {
+const filterImageFile: Options['fileFilter'] = (req, file, callback) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-    return callback(new Error('Only image files are allowed!'), false);
+    return callback(new Error('Only image files are allowed!'));
   }
   callback(null, true);
 };
 
-const buildFileName = (req, file, callback) => {
-  const name = file.originalname.split('.')[0] || file.name.split('.')[0];
-  const fileExtName = extname(file.originalname || file.name);
+const buildFileName: DiskStorageOptions['filename'] = (req, file, callback) => {
+  const name = file.originalname.split('.')[0] || file.filename.split('.')[0];
+  const fileExtName = extname(file.originalname || file.filename);
   const randomName = Array(4)
     .fill(null)
     .map(() => Math.round(Math.random() * 16).toString(16))

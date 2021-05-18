@@ -19,6 +19,7 @@ import { CommentEntity } from './comment.entity';
 @UseGuards(AuthGuard())
 export class CommentController {
   constructor(private commentService: CommentService) {}
+
   @Post()
   createComment(
     @Body(ValidationPipe) createCommentDto: CreateCommentDto,
@@ -35,6 +36,7 @@ export class CommentController {
   ): Promise<CommentEntity> {
     return this.commentService.updateComment(id, createCommentDto, user);
   }
+
   @Delete('/:id')
   deleteComment(@Param('id') id: number, @GetUser() user: User) {
     return this.commentService.deleteComment(id, user);

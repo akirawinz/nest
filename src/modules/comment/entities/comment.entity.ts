@@ -3,15 +3,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PostEntity } from '../post/post.entity';
-import { User } from '../user/user.entity';
+import { PostEntity } from '../../post/entities/post.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Entity({ name: 'comment' })
 export class CommentEntity extends BaseEntity {

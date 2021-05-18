@@ -3,4 +3,6 @@ export * from './user.module';
 export * from './user.repository';
 export * from './user.service';
 
-export * as UserEntity from './entities';
+export * from './entities/user.entity';
+
+export * from './dto/user.dto';

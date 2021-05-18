@@ -11,10 +11,12 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "paths": {
       "@modules/*": ["src/modules/*"],
       "@config/*": ["src/config/*"],
-      "@common/*": ["src/common/*"],
+      "@common/*": ["src/common/*"]
     }
   }
 }

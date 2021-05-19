@@ -6,8 +6,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommentRepository } from './comment.repository';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { User } from '../user/entities/user.entity';
-import { CommentEntity } from './entities/comment.entity';
+import { UserEntity } from '../user/entities/user.entity';
+import { CommentDto } from './dto/comment.dto';
 
 @Injectable()
 export class CommentService {
@@ -17,12 +17,17 @@ export class CommentService {
   ) {}
   async createComment(
     createCommentDto: CreateCommentDto,
-    user: User,
-  ): Promise<CommentEntity> {
-    return this.commentRepository.createComment(createCommentDto, user);
+    user: UserEntity,
+  ): Promise<CommentDto> {
+    const {
+      id,
+      description,
+      postId,
+    } = await this.commentRepository.createComment(createCommentDto, user);
+    return { id, description, postId };
   }
 
-  async getCommentByIdAndUserId(id: number, user: User) {
+  async getCommentByIdAndUserId(id: number, user: UserEntity) {
     const comment = await this.commentRepository.findOne({
       where: { id, userId: user.id },
     });
@@ -34,21 +39,29 @@ export class CommentService {
   async updateComment(
     id: number,
     createCommentDto: CreateCommentDto,
-    user: User,
-  ): Promise<CommentEntity> {
+    user: UserEntity,
+  ): Promise<CommentDto> {
     const { description } = createCommentDto;
-    const comment = await this.getCommentByIdAndUserId(id, user);
-    comment.description = description;
+
     try {
+      const comment = await this.getCommentByIdAndUserId(id, user);
+      comment.description = description;
+
       await comment.save();
+
+      return {
+        id: comment.id,
+        description: comment.description,
+        postId: comment.postId,
+      };
     } catch (e) {
       throw new InternalServerErrorException();
     }
-    return comment;
   }
 
-  async deleteComment(id: number, user: User): Promise<void> {
+  async deleteComment(id: number, user: UserEntity): Promise<void> {
     const result = await this.commentRepository.delete({ id, userId: user.id });
+
     if (result.affected === 0) {
       throw new NotFoundException(`Task with ID "${id}" not found`);
     }

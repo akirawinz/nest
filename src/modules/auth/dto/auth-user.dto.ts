@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class UserDto {
+export class AuthUserDto {
   @ApiProperty({
     description: 'username',
     required: true,
@@ -11,7 +11,14 @@ export class UserDto {
   @ApiProperty({
     description: 'user id',
     required: true,
-    example: 1,
+    example: '26',
   })
   id: number;
+
+  @ApiProperty({
+    description: 'access token which can use with Bearer header.',
+    required: true,
+    example: 'this is mock access token.',
+  })
+  accessToken: string;
 }

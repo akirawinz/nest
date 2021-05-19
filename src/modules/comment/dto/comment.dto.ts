@@ -1,21 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
-export class CreateCommentDto {
+export class CommentDto {
+  @ApiProperty({
+    description: 'comment id',
+    required: false,
+    example: 1,
+  })
+  id: number;
+
   @ApiProperty({
     description: 'comment content',
-    required: true,
-    example: 'this is comment.',
+    required: false,
+    example: 'you just create a comment.',
   })
-  @IsNotEmpty()
   description: string;
 
   @ApiProperty({
     description: 'id of post which this comment attrach to',
     required: false,
-    example: 1,
+    example: 8,
   })
-  @IsOptional()
-  @IsNumber()
   postId: number;
 }

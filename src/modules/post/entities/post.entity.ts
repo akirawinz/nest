@@ -1,5 +1,5 @@
 import { CommentEntity } from '@modules/comment/entities/comment.entity';
-import { User } from '@modules/user/entities/user.entity';
+import { UserEntity } from '@modules/user/entities/user.entity';
 import {
   BaseEntity,
   Column,
@@ -52,11 +52,11 @@ export class PostEntity extends BaseEntity {
   /**
    * ???
    */
-  @ManyToOne(() => User, (user) => user.posts, {
+  @ManyToOne(() => UserEntity, (user) => user.posts, {
     eager: false,
     onDelete: 'CASCADE',
   })
-  user: User[];
+  user: UserEntity[];
 
   /**
    * comments on this post

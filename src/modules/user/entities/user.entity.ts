@@ -14,7 +14,7 @@ import { PostEntity } from '@modules/post/entities/post.entity';
 
 @Entity()
 @Unique(['username'])
-export class User extends BaseEntity {
+export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
